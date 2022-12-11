@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { generateId } from '../helpers'
 import IStateProductosProps from '../interfaces/IStateProductosProps'
 import IProducto from '../interfaces/Producto/IProducto'
 
+import { FirebaseContext } from '../firebase'
+
 const Agregar = ({ productos, setProductos }: IStateProductosProps) => {
     const [title, setTitle] = useState<string>('')
     const [textAreaProducts, setTextAreaProducts] = useState<string>('')
+
+    const firebase = useContext(FirebaseContext);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
