@@ -1,8 +1,7 @@
-import React from 'react'
-import IStateProductosProps from '../interfaces/IStateProductosProps'
+import IStateProductosProps from '../interfaces/Producto/IStateProductosProps'
 import Producto from './Producto'
 
-const ListaProductos = ({ productos, setProductos }: IStateProductosProps) => {
+const ListaProductos = ({ productos }: IStateProductosProps) => {
   return (
     <div className='mt-3'>
         {
@@ -10,8 +9,6 @@ const ListaProductos = ({ productos, setProductos }: IStateProductosProps) => {
                 <Producto
                     key={ producto.id }
                     producto={ producto }
-                    productos={ productos }
-                    setProductos={ setProductos }
                 />
             )
         }

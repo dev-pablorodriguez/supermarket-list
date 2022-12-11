@@ -6,8 +6,8 @@ import {
     getFirestore,
     collection,
     query,
-    // where,
-    getDocs,
+    orderBy,
+    onSnapshot,
     addDoc,
     doc,
     deleteDoc,
@@ -24,37 +24,38 @@ export class Firebase {
         this._db = getFirestore(app);
     }
 
-    async getProducts(): Promise<IProducto[]>{
-        const productos: IProducto[] = [];
-
+    getProductsFromFirestoreAndSetThemInState(setProductos: React.Dispatch<React.SetStateAction<IProducto[]>>){
         try {
             const col = collection(this._db, 'productos')
-            // const q = query(col, where('inPossesion', '==', false));
-            const q = query(col);
 
+            const unsuscribe = onSnapshot(query(col, orderBy('created')), querySnapshot => {
+                const productos: IProducto[] = [];
+                querySnapshot.forEach(doc => {
+                    const { title, inPossesion, created } = doc.data()
+                    productos.push({
+                        id: doc.id,
+                        title,
+                        inPossesion,
+                        created
+                    });
+                })
 
-            const querySnapshot = await getDocs(q)
-            querySnapshot.forEach(doc => {
-                const { title, inPossesion } = doc.data()
-                productos.push({
-                    id: doc.id,
-                    title,
-                    inPossesion
-                });
+                setProductos(productos);
             })
-        } catch (error) {
-            console.log(error)
-        }
 
-        return productos;
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     async addProduct(producto: IProducto): Promise<boolean>{
         try {
             const col = collection(this._db, 'productos')
+            const { title, inPossesion, created } = producto;
             await addDoc(col, {
-                title: producto.title,
-                inPossesion: producto.inPossesion
+                title,
+                inPossesion,
+                created
             })
 
             return true;
@@ -80,12 +81,13 @@ export class Firebase {
 
     async updateProduct(producto: IProducto): Promise<boolean>{
         try {
-            const { id, title, inPossesion } = producto
+            const { id, title, inPossesion, created } = producto
 
             const document = doc(this._db, 'productos', id)
             await setDoc(document, {
-                title: title,
-                inPossesion: inPossesion
+                title,
+                inPossesion,
+                created
             })
 
             return true;

@@ -1,11 +1,9 @@
 import React, { useState, useContext } from 'react'
-import { generateId } from '../helpers'
-import IStateProductosProps from '../interfaces/IStateProductosProps'
 import IProducto from '../interfaces/Producto/IProducto'
 
 import { FirebaseContext } from '../firebase'
 
-const Agregar = ({ productos, setProductos }: IStateProductosProps) => {
+const Agregar = () => {
     const [title, setTitle] = useState<string>('')
     const [textAreaProducts, setTextAreaProducts] = useState<string>('')
 
@@ -18,12 +16,9 @@ const Agregar = ({ productos, setProductos }: IStateProductosProps) => {
             return;
         }
 
-        const nuevoProducto: IProducto = {
-            id: generateId(),
-            title,
-            inPossesion: false
-        }
-        setProductos([ ...productos, nuevoProducto ])
+        const nuevoProducto = getNewProduct(title)
+
+        firebase.addProduct(nuevoProducto)
 
         setTitle('')
     }
@@ -42,25 +37,26 @@ const Agregar = ({ productos, setProductos }: IStateProductosProps) => {
         }
         const nuevosProductos = textAreaProducts.split(/\r?\n|\r|\n/g);
 
-        let productosActualizados = [ ...productos ];
-
-        nuevosProductos.forEach( item => {
-            if(item.trim() === ''){
+        nuevosProductos.forEach( title => {
+            if(title.trim() === ''){
                 return;
             }
 
-            const nuevoProducto: IProducto = {
-                id: generateId(),
-                title: item,
-                inPossesion: false
-            }
+            const nuevoProducto = getNewProduct(title)
 
-            productosActualizados.push(nuevoProducto)
+            firebase.addProduct(nuevoProducto)
         })
 
-        setProductos(productosActualizados)
-
         setTextAreaProducts('')
+    }
+
+    const getNewProduct = (title: string): IProducto => {
+        return {
+            id: '',
+            title: title,
+            inPossesion: false,
+            created: new Date()
+        }
     }
 
     return (

@@ -1,26 +1,20 @@
-import React from 'react'
+import { useContext } from 'react'
 import IProductoProps from '../interfaces/Producto/IProductoProps'
 import { TrashFill } from 'react-bootstrap-icons'
-import IProducto from '../interfaces/Producto/IProducto';
 
-const Producto = ({ producto, productos, setProductos }: IProductoProps) => {
+import { FirebaseContext } from '../firebase'
 
+const Producto = ({ producto }: IProductoProps) => {
+    const firebase = useContext(FirebaseContext);
     const { id, title, inPossesion } = producto;
 
     const actualizarProducto = () => {
-        const productosActualizados: IProducto[] = productos.map( item => {
-            if(producto.id === item.id){
-                return { ...item, inPossesion: !item.inPossesion }
-            }else{
-                return item;
-            }
-        })
-
-        setProductos(productosActualizados)
+        producto.inPossesion = !inPossesion;
+        firebase.updateProduct(producto);
     }
 
     const eliminarProducto = () => {
-        setProductos([ ...productos.filter( item => item.id !== id) ])
+        firebase.deleteProduct(id)
     }
 
     return (
