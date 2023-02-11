@@ -1,7 +1,7 @@
 import IStateProductosProps from '../interfaces/Producto/IStateProductosProps'
 import Producto from './Producto'
 
-const ListaProductos = ({ productos }: IStateProductosProps) => {
+const ListaProductos = ({ productos, isDeleteMode }: IStateProductosProps) => {
   return (
     <div className='mt-3'>
         {
@@ -9,6 +9,7 @@ const ListaProductos = ({ productos }: IStateProductosProps) => {
                 <Producto
                     key={ producto.id }
                     producto={ producto }
+                    isDeleteMode={ isDeleteMode }
                 />
             )
         }

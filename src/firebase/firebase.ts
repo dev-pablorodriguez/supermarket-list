@@ -28,7 +28,7 @@ export class Firebase {
         try {
             const col = collection(this._db, 'productos')
 
-            const unsuscribe = onSnapshot(query(col, orderBy('created')), querySnapshot => {
+            const unsuscribe = onSnapshot(query(col, orderBy('inPossesion')), querySnapshot => {
                 const productos: IProducto[] = [];
                 querySnapshot.forEach(doc => {
                     const { title, inPossesion, created } = doc.data()

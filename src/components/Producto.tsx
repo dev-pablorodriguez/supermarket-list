@@ -4,7 +4,7 @@ import { TrashFill } from 'react-bootstrap-icons'
 
 import { FirebaseContext } from '../firebase'
 
-const Producto = ({ producto }: IProductoProps) => {
+const Producto = ({ producto, isDeleteMode }: IProductoProps) => {
     const firebase = useContext(FirebaseContext);
     const { id, title, inPossesion } = producto;
 
@@ -17,22 +17,30 @@ const Producto = ({ producto }: IProductoProps) => {
         firebase.deleteProduct(id)
     }
 
+    const titleStyle = () => {
+        return `mx-2 ${ inPossesion ? 'text-decoration-line-through text-secondary' : '' }`
+    }
+
     return (
-        <div className='d-flex p-2 border'>
-            <div className="d-flex flex-row-reverse col-sm-2 col-md-4 col-lg-4">
-                <input
-                    type='checkbox' 
-                    className='mx-2 form-check-input'
-                    checked={ inPossesion }
-                    onChange={ actualizarProducto }
-                />
-            </div>
-            <div className="d-flex col-sm-8 col-md-6 col-lg-7 mx-2">{ title.toUpperCase() }</div>
-            <div className="d-flex col-sm-2 col-md-2 col-lg-1 mx-2">
-                <button
-                    className='btn btn-sm btn-outline-danger'
-                    onClick={ eliminarProducto }
-                ><TrashFill size={ 16 } /></button>
+        <div className='d-flex justify-content-between p-2 border'>
+            <div className={ titleStyle() }>{ title.toUpperCase() }</div>
+            <div>
+                {
+                    isDeleteMode ?
+                    <button
+                        className='btn btn-sm btn-outline-danger'
+                        onClick={ eliminarProducto }
+                    >
+                        <TrashFill size={ 16 } />
+                    </button>
+                    :
+                    <input
+                        type='checkbox' 
+                        className='mx-2 form-check-input'
+                        checked={ inPossesion }
+                        onChange={ actualizarProducto }
+                    />
+                }
             </div>
             
         </div>

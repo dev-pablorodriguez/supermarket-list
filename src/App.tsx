@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Agregar from './components/Agregar';
+import ToolBar from './components/ToolBar';
 import ListaProductos from './components/ListaProductos';
 import IProducto from './interfaces/Producto/IProducto';
 
@@ -7,6 +7,7 @@ import firebase, { FirebaseContext } from './firebase'
 
 function App() {
   const [productos, setProductos] = useState<IProducto[]>([]);
+  const [isDeleteMode, setIsDeleteMode] = useState<boolean>(false);
 
   useEffect(() => {
     firebase.getProductsFromFirestoreAndSetThemInState(setProductos);
@@ -20,9 +21,13 @@ function App() {
             <div className='bg-success p-2 text-white font-bold'>
               <h1>Lista Supermercado</h1>
             </div>
-            <Agregar />
+            <ToolBar
+              isDeleteMode={ isDeleteMode }
+              setIsDeleteMode={ setIsDeleteMode }
+            />
             
             <ListaProductos
+              isDeleteMode={ isDeleteMode }
               productos={ productos }
             />
           </div>

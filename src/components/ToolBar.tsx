@@ -3,7 +3,7 @@ import IProducto from '../interfaces/Producto/IProducto'
 
 import { FirebaseContext } from '../firebase'
 
-const Agregar = () => {
+const ToolBar = ({ isDeleteMode, setIsDeleteMode }: any) => {
     const [title, setTitle] = useState<string>('')
     const [textAreaProducts, setTextAreaProducts] = useState<string>('')
 
@@ -62,11 +62,26 @@ const Agregar = () => {
     return (
         <div className='mt-5'>
             <div className='mb-4'>
-                <button
-                    className='btn btn-primary'
-                    data-bs-toggle="modal" data-bs-target="#exampleModal"
-                >Copiar Productos del Portapapeles
-                </button>
+                <div className="row">
+                    <div className="col m-1">
+                        <button
+                            className='btn btn-primary'
+                            data-bs-toggle="modal" data-bs-target="#exampleModal"
+                        >
+                            Copiar Productos del Portapapeles
+                        </button>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col m-1">
+                        <button
+                            onClick={ () => setIsDeleteMode(!isDeleteMode) }
+                            className={ isDeleteMode ? 'btn btn-warning m-1' : 'btn btn-danger m-1' }
+                        >
+                            { isDeleteMode ? 'Salir Modo Eliminación' : 'Entrar Modo Eliminación' }
+                        </button>
+                    </div>
+                </div>
             </div>
             <form onSubmit={ handleSubmit }>
                 <input
@@ -109,4 +124,4 @@ const Agregar = () => {
     )
 }
 
-export default Agregar
+export default ToolBar
